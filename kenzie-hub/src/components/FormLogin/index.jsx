@@ -1,47 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { Input } from "../Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formLoginSchema } from "./formLoginSchema";
-import { api } from "../../services/api";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { userContext } from "../../contexts/userContexs";
 
 export const FormLogin = () => {
-  const navigate = useNavigate();
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm({ resolver: yupResolver(formLoginSchema) });
 
-  const submit = (formData) => {
-    loginUser(formData);
-  };
-
-  const loginUser = async (formData) => {
-    try {
-      const response = await api.post("/sessions", formData);
-      localStorage.setItem("@USERID", JSON.stringify(response.data.user));
-      localStorage.setItem("@TOKEN", JSON.stringify(response.data.token));
-      navigate("/home");
-    } catch (error) {
-      toast.error(`Usuário ou senha Inválidos`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-  };
+  const { Login } = useContext(userContext);
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate>
+    <form onSubmit={handleSubmit(Login)} noValidate>
       <Input
         type="email"
         label="Email"

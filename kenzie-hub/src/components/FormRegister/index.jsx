@@ -1,54 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormRegisterSchema } from "./formRegisterSchema";
 import { Input } from "../Input";
-import { api } from "../../services/api";
-import { toast } from "react-toastify";
+import { userContext } from "../../contexts/userContexs";
 
 export const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(FormRegisterSchema) });
 
-  const registerUser = async (formData) => {
-    try {
-      const response = await api.post("/users", formData);
-      toast.success("Conta criada com sucesso", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    } catch (error) {
-      toast.error(`Ops! Algo deu errado!`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-  };
-
-  const submit = (formData) => {
-    registerUser(formData);
-    reset();
-  };
+  const { Register } = useContext(userContext);
 
   return (
     <>
-      <form onSubmit={handleSubmit(submit)} noValidate>
+      <form onSubmit={handleSubmit(Register)} noValidate>
         <Input
           type="text"
           label="Nome"
