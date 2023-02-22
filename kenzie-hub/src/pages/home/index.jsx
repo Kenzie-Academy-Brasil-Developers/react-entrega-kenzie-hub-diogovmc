@@ -20,6 +20,7 @@ export const HomePage = () => {
 
   const handleClose = () => {
     setShowModal(false);
+    window.location.reload(false);
   };
   return (
     <>
